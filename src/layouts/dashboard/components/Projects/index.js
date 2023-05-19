@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -30,10 +30,20 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import data from "layouts/dashboard/components/Projects/data";
+import { getTop10 } from "helper/backend_helper";
 
 function Projects() {
-  const { columns, rows } = data();
+  const [users, setUsers] = useState([]);
+  const { columns, rows } = data(users);
   const [menu, setMenu] = useState(null);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await getTop10();
+      setUsers(response.data.data);
+    }
+    getData();
+  }, []);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -64,7 +74,7 @@ function Projects() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Projects
+            Top 10 Drivers
           </MDTypography>
           <MDBox display="flex" alignItems="center" lineHeight={0}>
             <Icon
@@ -77,15 +87,15 @@ function Projects() {
               done
             </Icon>
             <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
+              &nbsp;<strong>Most earned</strong> drivers
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox color="text" px={2}>
+        {/* <MDBox color="text" px={2}>
           <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
             more_vert
           </Icon>
-        </MDBox>
+        </MDBox> */}
         {renderMenu}
       </MDBox>
       <MDBox>

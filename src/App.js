@@ -16,7 +16,8 @@ Coded by www.creative-tim.com
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
+import SignIn from "layouts/authentication/sign-in";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -53,7 +54,10 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
+const userData = localStorage.getItem("shypie");
+
 export default function App() {
+  const navigate = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,
@@ -68,6 +72,10 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+
+  // const [user, setUser] = useState();
+
+  useEffect(() => !userData && navigate("/authentication/sign-in"), []);
 
   // Cache for the rtl
   useMemo(() => {
@@ -150,6 +158,7 @@ export default function App() {
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
+        {console.log("ok")}
         {layout === "dashboard" && (
           <>
             <Sidenav
@@ -174,6 +183,7 @@ export default function App() {
   ) : (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
+
       {layout === "dashboard" && (
         <>
           <Sidenav
@@ -189,10 +199,12 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
+
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {/* <Route path="*" element={<Navigate to="/authentication/sign-in" />} /> */}
       </Routes>
+      {/* {!userData && <Navigate to="/authentication/sign-in" />} */}
     </ThemeProvider>
   );
 }

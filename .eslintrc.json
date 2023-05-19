@@ -13,6 +13,11 @@
   },
   "plugins": ["react", "prettier"],
   "rules": {
+    "consistent-return": "off",
+    "prefer-arrow-callback": "off",
+    "class-methods-use-this": ["error", { "exceptMethods": ["handle*"] }],
+    "no-param-reassign": [2, { "props": false }],
+    "no-unused-vars": "off",
     "prettier/prettier": [
       "error",
       {
